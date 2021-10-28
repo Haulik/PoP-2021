@@ -1,6 +1,6 @@
 # PoP-2021
 
-# Working with GitHub in VS Code
+ Working with GitHub in VS Code
 
 Using [GitHub](https://github.com) with Visual Studio Code lets you share your source code and collaborate with others. GitHub integration is provided through the [GitHub Pull Requests and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github) extension.
 
