@@ -1,5 +1,6 @@
 type  weekday = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 
+//7ø1
 let dayToNumber (weekday:weekday) : int =
     match weekday with 
         | Monday-> 1
@@ -10,6 +11,7 @@ let dayToNumber (weekday:weekday) : int =
         | Saturday -> 6
         | Sunday-> 7
 
+//7ø2
 let nextDay (day:weekday) : weekday =
     match day with 
         | Monday-> Tuesday
@@ -21,6 +23,7 @@ let nextDay (day:weekday) : weekday =
         | Sunday-> Monday
 
 
+//7ø3
 let numberToDay  (n:int) : weekday option =
     match n with 
         | 1 -> Some Monday
