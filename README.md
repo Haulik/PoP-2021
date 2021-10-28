@@ -150,7 +150,7 @@ When you run the **Open Repository** command, you then choose whether to open a 
 
 If you haven't logged into GitHub from VS Code before, you'll be prompted to authenticate with your GitHub account.
 
-![GitHub Repository extension open repository dropdown](images/github/open-github-repository-dropdown.png)
+![GitHub Repository extension open repository dropdown](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/open-github-repository-dropdown.png)
 
 You can provide the repository URL directly or search GitHub for the repository you want by typing in the text box.
 
@@ -164,19 +164,19 @@ Another feature of the GitHub Repositories extension is that every time you open
 
 You can easily switch between branches by clicking on the branch indicator in the Status bar. One great feature of the GitHub Repositories extension is that you can switch branches without needing to stash uncommitted changes. The extension remembers your changes and reapplies them when you switch branches.
 
-![Branch indicator on the Status bar](images/github/branch-indicator-status-bar.png)
+![Branch indicator on the Status bar](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/branch-indicator-status-bar.png)
 
 ### Remote Explorer
 
 You can quickly reopen remote repositories with the Remote Explorer available on the Activity bar. This view shows you the previously opened repositories and branches.
 
-![Remote Explorer view](images/github/github-remote-explorer.png)
+![Remote Explorer view](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/github-remote-explorer.png)
 
 ### Create Pull Requests
 
 If your workflow uses Pull Requests, rather than direct commits to a repository, you can create a new PR from the Source Control view. You'll be prompted to provide a title and create a new branch.
 
-![Create a Pull Request button in the Source Control view](images/github/github-repositories-create-pull-request.png)
+![Create a Pull Request button in the Source Control view](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/github-repositories-create-pull-request.png)
 
 Once you have created a Pull Request, you can use the [GitHub Pull Request and Issues](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github) extension to review, edit, and merge your PR as described [earlier](/docs/editor/github.md#pull-requests) in this topic.
 
@@ -184,7 +184,7 @@ Once you have created a Pull Request, you can use the [GitHub Pull Request and I
 
 Without a repository's files on your local machine, the GitHub Repositories extension creates a virtual file system in memory so you can view file contents and make edits. Using a virtual file system means that some operations and extensions which assume local files are not enabled or have limited functionality. Features such as tasks, debugging, and integrated terminals are not enabled and you can learn about the level of support for the virtual file system via the **features are not available** link in the Remote indicator hover.
 
-![Remote indicator hover with features are not available link](images/github/features-not-available-hover.png)
+![Remote indicator hover with features are not available link](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/features-not-available-hover.png)
 
 Extension authors can learn more about running in a virtual file system and workspace in the [Virtual Workspaces extension author's guide](https://github.com/microsoft/vscode/wiki/Virtual-Workspaces).
 
@@ -192,8 +192,8 @@ Extension authors can learn more about running in a virtual file system and work
 
 Sometimes you'll want to switch to working on a repository in a development environment with support for a local file system and full language and development tooling. The GitHub Repositories extension makes it easy for you to clone the repository locally or into a Docker container (if you have [Docker](https://docker.com/) and the Microsoft [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) installed) with the **GitHub Repositories: Continue Working on...** command available from the Command Palette (`kb(workbench.action.showCommands)`) or by clicking on the the Remote indicator in the Status bar.
 
-![Continue Working on command in Remote dropdown](images/github/continue-working.png)
+![Continue Working on command in Remote dropdown](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/continue-working.png)
 
 If you are using the [browser-based editor](/docs/remote/codespaces.md#browserbased-editor), the **"Continue Working On..."** command has the options to open the repository locally or within a cloud-hosted environment in [GitHub Codespaces](https://github.com/features/codespaces).
 
-![Continue Working On from web-based editor](images/github/codespaces-continue.png)
+![Continue Working On from web-based editor](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/codespaces-continue.png)
