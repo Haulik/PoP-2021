@@ -1,0 +1,185 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{parskip} 
+
+
+\title{POP Assignment 2i}
+\author{Thomas Haulik Barchager - \texttt{jxg170}}
+\date{September 2021}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\section{Assignment}
+
+
+\subsection{2i0}
+Describe the 3 ways an F\# program can be run from the command line (terminal), and discuss
+the advantages and disadvantages of each method.
+\subsubsection{(2i0)}
+
+The first way to run F\# code is by using the interpreter in the terminal/CMD by typing \textbf{"fsharpi"}. this allows you to type F\# code into the terminal and run the code directly from the terminal by ending the code with "\textbf{;;}".
+This is a easy and quick way to run small amount of code, if for example you want to make some calculation by using F\#. Furthermore by running the code this way you are giving more information about the variables you initializing, what type it is and what value it has. The disadvantages to this is that the code need to compile every time you run it, which can make for a slow process. Plus the code that is typed in the terminal doesn't get saved.
+
+The second way to run F\# code is to use the interpreter on a already created .fsx file. This is done by typing "fsharpi filname.fsx". By running the code this way you are not giving all the extra information as the first way, instead the code just runs normal and the only things that shows up in the terminal is the things you told the code to print out. As the first way to run the code, this way can also be considered slow because the code need to compile every time you run it.
+
+The third way to run F\# code is to manually compile the .fsx file to a .exe and then run that file. This is done by first typing "fsharpc filname.fsx" which will compile the code and created a .exe file, that can be executed by typing "mono filname.exe". By running the code this way, you like the second way, are not giving all the extra information as the first way, but only what you told the code to print out.
+The advantages to manually Compile the .fsx file to a .exe, is that the code no longer need to compile every time to run the code and instead runs the code immediately. The downside to this is then you want to make some small changes to the code, you will have to write them in the .fsx file and then compile the file again to create a new .exe file.
+
+
+\subsection{2i1}
+Using slicing, write an expression in F\# which extracts the first and the second word from the
+string “hello world”. Enter the expression in an .fsx file and compile and run it. Does the
+program produce output? Explain why or why not.
+\subsubsection{(2i1)}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=8cm]{Slicing.JPG}
+  \caption{The slicing code}\label{Slicing}
+\end{figure}
+
+The program does produce an output as expected.
+The code starts by initialize two variables. One that contains the string "Hello world" and one that contains the index of the space between the two words. By using the \textbf{Printfn} function I tell the code first to print the string "Hello world", then the first word of the string: "Hello" and then the last word of the string: "World". 
+
+
+\subsection{2i2}
+Use pen and paper to complete the following table
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+Decimal & Binary & Hexadecimal & Octal \\ \hline
+10      &        &             &       \\ \hline
+        & 10101  &             &       \\ \hline
+        &        & 2f          &       \\ \hline
+        &        &             & 73    \\ \hline
+\end{tabular}
+\end{table}
+
+such that every row represents the same value written on 4 different forms. Include a demonstration of how you converted binary to decimal, decimal to binary, binary to hexadecimal,
+hexadecimal to binary, binary to octal, and octal to binary.
+\subsubsection{(2i2)}
+\begin{figure}[H]
+\centering
+  \includegraphics[width=6cm]{TableBin.jpg}
+  \caption{Completed table}\label{Table}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[width=3cm]{HexToBin.JPG}
+  \caption{Hexadecimal to Binary}\label{Table}
+\end{figure}
+
+\subsubsection{(2i2: binary  to  decimal)}
+
+$Binary = 111011_2$
+\newline
+$1*2^0 = 1
+\newline
+1*2^1 = 2
+\newline
+0*2^2 = 0
+\newline
+1*2^3 = 8
+\newline
+1*2^4 = 16
+\newline
+1*2^5 = 32
+\newline
+Decimal = 59_1_0$
+
+\subsubsection{(2i2: decimal  to binary)}
+$Decimal = 21_1_0$
+\newline
+$21/2 = 10$  $Rem = 1$
+\newline
+$10/2 = 5$    $Rem = 0$
+\newline
+$5/2 = 2$    $Rem = 1$
+\newline
+$2/2 = 1$     $Rem = 0$
+\newline
+$1/2 = 0$     $Rem = 1$
+\newline
+$Binary = 10101_2$
+\subsubsection{(2i2: binary to hexadecimal)}
+
+By using the table in figure 3, I'm able to split the binary up in 4 digits number and translate the binary number to Hexadecimal. The reason behind this is because $2^4 = 16$
+
+$Binary = 101111_2$
+\newline
+$0010 = 2$
+\newline
+$1111 = F$
+\newline
+$Hexadecimal = 2F_1_6$
+
+\subsubsection{(2i2: hexadecimal to binary)}
+The same idea as the above one, just the other way around.
+
+$Hexadecimal = 3b_1_6$
+\newline
+$3 = 0011$
+\newline
+$b = 1011$
+\newline
+$Binary = 111011_2$
+
+
+A bigger number for fun:
+
+$Hexadecimal = 562A_1_6$
+\newline
+$5 = 0101$
+\newline
+$6 = 0110$
+\newline
+$2 = 0010$
+\newline
+$A = 1010$
+\newline
+$Binary = 101011000101010_2$
+
+\subsubsection{(2i2: binary to octal)}
+Again the same idea as the above one, but this time splitting the binary up in 3 digits number instead. $2^3 = 8$
+
+$Binary = 111011_2$
+\newline
+$111 = 7$
+\newline
+$011 = 3$
+\newline
+$Octal = 73_8$
+\subsubsection{(2i2: octal to binary)}
+$octal = 57_8$
+\newline
+$5 = 101$
+\newline
+$7 = 111$
+\newline
+$Binary = 101111_2$
+
+
+A bigger number for fun:
+
+$octal = 645_8$
+\newline
+$6 = 110$
+\newline
+$4 = 100$
+\newline
+$5 = 101$
+\newline
+$Binary = 110100101_2$
+
+
+
+\end{document}
