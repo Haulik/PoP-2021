@@ -24,7 +24,7 @@ If you are not redirected to VS Code, you can add your authorization token manua
 
 You can search for and clone a repository from GitHub using the **Git: Clone** command in the Command Palette (`kb(workbench.action.showCommands)`) or by using the **Clone Repository** button in the Source Control view (available when you have no folder open).
 
-![Clone From GitHub](images/github/clone-from-github.gif)
+![Clone From GitHub](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/clone-from-github.gif)
 
 ### Authenticating with an existing repository
 
@@ -32,7 +32,7 @@ Enabling authentication through GitHub happens when you run any Git action in VS
 
 When you do something that requires GitHub authentication, you'll see a prompt to sign in:
 
-![Authentication Prompt](images/github/auth-prompt.png)
+![Authentication Prompt](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/auth-prompt.png)
 
 Follow the steps to sign into GitHub and return to VS Code. If authenticating with an existing repository doesn't work automatically, you may need to manually provide a personal access token. See [Personal Access Token authentication](https://github.com/microsoft/vscode-pull-request-github/wiki#personal-access-token-authentication) for more information.
 
@@ -46,17 +46,17 @@ Note that there are several ways to authenticate to GitHub, including using your
 
 When you have a repository open and a user is @-mentioned, you can hover over that username and see a GitHub-style hover.
 
-![User Hover](images/github/user-hover.png)
+![User Hover](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/user-hover.png)
 
 There is a similar hover for #-mentioned issue numbers, full GitHub issue URLs, and repository specified issues.
 
-![Issue Hover](images/github/issue-hover.png)
+![Issue Hover](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/issue-hover.png)
 
 ### Suggestions
 
 User suggestions are triggered by the "@" character and issue suggestions are triggered by the "#" character. Suggestions are available in the editor and in the **Source Control** view's input box.
 
-![User and Issue suggestions](images/github/user-issue-suggest.gif)
+![User and Issue suggestions](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/user-issue-suggest.gif)
 
 The issues that appear in the suggestion can be configured with the **GitHub Issues: Queries** (`githubIssues.queries`) [setting](/docs/getstarted/settings.md). The queries use the [GitHub search syntax](https://help.github.com/articles/understanding-the-search-syntax).
 
@@ -89,17 +89,17 @@ The queries used to display pull requests can be configured with the **GitHub Pu
 
 You can use the **GitHub Pull Requests: Create Pull Request** command or use the **+** button in the **Pull Requests** view to create a pull request. If you have not already pushed your branch to a remote, the extension will do this for you. You can use the last commit message, the branch name, or write a custom title for the pull request. If your repository has a pull request template, this will automatically be used for the description.
 
-![Creating a Pull Request](images/github/pull-request-create.gif)
+![Creating a Pull Request](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/pull-request-create.gif)
 
 ### Reviewing
 
 Pull requests can be reviewed from the **Pull Requests** view. You can assign reviewers and labels, add comments, approve, close, and merge all from the pull request description.
 
-![Review Pull Request](images/github/review-pull-request.gif)
+![Review Pull Request](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/review-pull-request.gif)
 
 From the description page, you can also easily checkout the pull request locally using the **Checkout** button. This will add a new **Changes in Pull Request** view from which you can view diffs of the current changes as well as all commits and the changes within these commits. Files that have been commented on are decorated with a diamond icon. To view the file on disk, you can use the **Open File** inline action.
 
-![Changes in Pull Request](images/github/changes-view.png)
+![Changes in Pull Request](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/changes-view.png)
 
 The diff editors from this view use the local file, so file navigation, IntelliSense, and editing work as normal. You can add comments within the editor on these diffs. Both adding single comments and creating a whole review is supported.
 
@@ -109,7 +109,7 @@ The diff editors from this view use the local file, so file navigation, IntelliS
 
 Issues can be created from the **+** button in the **Issues** view and by using the **GitHub Issues: Create Issue from Selection** and **GitHub Issues: Create Issue from Clipboard** commands. They can also be created using a Code Action for "TODO" comments.
 
-![Create Issue from TODO](images/github/issue-from-todo.gif)
+![Create Issue from TODO](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/issue-from-todo.gif)
 
 You can configure the trigger for the Code Action using the **GitHub Issues: Create Issue Triggers** (`githubIssues.createIssueTriggers`) setting.
 
@@ -130,7 +130,7 @@ The default issue triggers are:
 
 From the **Issues** view, you can see your issues and work on them. By default, when you start working on an issue, a branch will be created for you. You can configure the name of the branch using the **GitHub Issues: Working Issue Branch** (`githubIssues.workingIssueBranch`) setting. The commit message input box in the **Source Control** view will be populated with a commit message, which can be configured with **GitHub Issues: Working Issue Format SCM** (`githubIssues.workingIssueFormatScm`).
 
-![Work on Issue](images/github/work-on-issue.gif)
+![Work on Issue](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/work-on-issue.gif)
 
 If your workflow doesn't involve creating a branch, or if you want to be prompted to enter a branch name every time, you can skip that step by turning off the **GitHub Issues: Use Branch For Issues** (`githubIssues.useBranchForIssues`) setting.
 
@@ -138,13 +138,13 @@ If your workflow doesn't involve creating a branch, or if you want to be prompte
 
 The [GitHub Repositories](https://marketplace.visualstudio.com/items?itemName=github.remotehub) extension lets you quickly browse, search, edit, and commit to any remote GitHub repository directly from within Visual Studio Code, without needing to clone the repository locally. This can be fast and convenient for many scenarios, where you just need to review source code or make a small change to a file or asset.
 
-![GitHub Repositories extension](images/github/github-repositories-extension.png)
+![GitHub Repositories extension](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/github-repositories-extension.png)
 
 ### Opening a repository
 
 Once you have installed the GitHub Repositories extension, you can open a repository with the **GitHub Repositories: Open Repository...** command from the Command Palette (`kb(workbench.action.showCommands)`) or by clicking the Remote indicator in the lower left of the Status bar.
 
-![Remote indicator in the Status bar](images/github/remote-indicator.png)
+![Remote indicator in the Status bar](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/remote-indicator.png)
 
 When you run the **Open Repository** command, you then choose whether to open a repository from GitHub, open a Pull Request from GitHub, or reopen a repository that you had previously connected to.
 
