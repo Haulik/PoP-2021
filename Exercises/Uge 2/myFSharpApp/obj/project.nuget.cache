@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "iUjrC/9SQO6CLoZ/a9YWURcM+/k1QqeBIn2wtlmsyi7/C50ho7ykIjj8VKeCL/WS/zFDM2ZoxhACr/LPO4LNRA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\thoma\\OneDrive\\Dokumenter\\Datalogi-PoP\\Uge 2\\myFSharpApp\\myFSharpApp.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\thoma\\.nuget\\packages\\fsharp.core\\5.0.0\\fsharp.core.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
