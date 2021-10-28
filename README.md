@@ -73,7 +73,7 @@ You can also configure which files show these suggestions using the settings **G
 
 From the **Pull Requests** view you can view, manage, and create pull requests.
 
-![Pull Request View](images/github/pull-request-view.png)
+![Pull Request View](https://media.githubusercontent.com/media/microsoft/vscode-docs/main/docs/editor/images/github/pull-request-view.png)
 
 The queries used to display pull requests can be configured with the **GitHub Pull Requests: Queries** (`githubPullRequests.queries`) setting and use the [GitHub search syntax](https://help.github.com/articles/understanding-the-search-syntax).
 
