@@ -29,7 +29,7 @@ let transposeLstLst (llst: 'a list list) : 'a list list =
    result
 
 
-//let help (a:int) (b:int) : 'a =
+//let help (a:int) (b:int) : 'a = ..
 
 
 
