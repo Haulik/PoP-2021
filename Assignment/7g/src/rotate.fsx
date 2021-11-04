@@ -16,6 +16,7 @@ let rec board2Str (b:Board) : string =
         |[x] -> x.ToString()
         | x :: ys -> x.ToString() + board2Str ys
 
+//sdf
 
 
 
