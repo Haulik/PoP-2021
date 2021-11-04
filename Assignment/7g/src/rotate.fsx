@@ -22,25 +22,41 @@ let board2Str (b:Board) : string =
 let validRotate (b:Board) (p:Position) : bool =
     let length = int(sqrt(float b.Length))
     match p with    
-        | p when p % length = 0 -> false
-        | p when p >= length * length - length -> false
-        | p when p > length * length -> false
+        | p when p+1 % length = 0 -> false
+        | p when p+1 >= length * length - length -> false
+        | p when p+1 > length * length -> false
         | _ -> true
+
+(* let rec rotateHelper (b:Board) (p:Position) (index:int) : Board =
+    let len = b.Length
+    match index with
+        | p ->  *)
+
+
 
 let rotate (board:Board) (p:Position) : Board =
     let length = int(sqrt(float board.Length))
-    let (a,b,c,d) = (board.[p],board.[p+1],board.[p+length],board.[p+length+1])
-    printfn "%A" (a,b,c,d)
-    board
-    //let new_b = b.[0..(pos-1)] @ c @ a @ b.[(pos+2)..(pos+length)] @ d @ b @ b.[(pos+length+1)..]
+    let rotateHelper (i:int) : int =
+        match i with 
+            | n when n=p -> p + length 
+            | n when n=p + 1 -> p
+            | n when n = p + length + 1 -> p + 1
+            | n when n = p + length -> p + length + 1
+            | _ -> 0
+    let reslist = List.init (board.Length) (fun i -> if i = p || i = (p + 1) || i = (p + length) || i = (p + length + 1) then board.[(rotateHelper i)] else board.[i])
+    reslist
+
+let scramble (b:Board) (m:uint) : Board =   
+    let rnd = System.Random ()
+    let boardlength = b.Length
+    let rec scrambleHelper (b:Board) (m:int) (counter:int) : Board =
+        if counter >= m then 
+            b
+        else
+            let n = (rnd.Next boardlength)
+            if (validRotate b n) then scrambleHelper (rotate b n) m (counter+1)
+            else scrambleHelper b m counter
+    scrambleHelper b (int(m)) 0
 
 
-let rec scramble (b:Board) (m:uint) : Board =
-    let rnd = System.Random  ()
-    let boardlenght 
-
-
-
-
-let b1 = (board2Str (create 3u))
-printfn "%A" (rotate2 (create 3u))
+printfn "%A" (board2Str(scramble (create 5u) 100u))
