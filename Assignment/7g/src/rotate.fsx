@@ -1,6 +1,7 @@
 //module Rotate
 
 type Board = char list
+type Position = int
 
 let listabc = ['a'..'z']
 
@@ -19,7 +20,13 @@ let board2Str (b:Board) : string =
     helper b length length
     //printfn "%d" length
 
-//let validRotation (b:Board) (p:Position) : bool =
+let validRotation (b:Board) (p:Position) : bool =
+    let length = int(sqrt(float b.Length)) 
+    match p with
+    | p when p % length = 0 -> false
+    | p when p >= length * length - length -> false
+    | p when p > length * length -> false
+    | _ -> true
 
  
 
