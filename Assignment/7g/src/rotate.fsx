@@ -27,6 +27,7 @@ let validRotate (b:Board) (p:Position) : bool =
         | p when p > length * length -> false
         | _ -> true
 
+
 let rec rotateHelper (board:Board) (a,b,c,d:Position) (index:int) (prevChar:char) : Board =
     match index with
         | b -> 
