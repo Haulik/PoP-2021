@@ -27,23 +27,20 @@ let validRotate (b:Board) (p:Position) : bool =
         | p when p > length * length -> false
         | _ -> true
 
-
-let rec rotateHelper (board:Board) (a,b,c,d:Position) (index:int) (prevChar:char) : Board =
-    match index with
-        | b -> 
-        | d -> b
-        | a -> c
-        | c -> d
-        | _ -> (rotateHelper board (a,b,c,d) index prevChar)
-
-
-
-let rotate (b:Board) (p:Position) : Board =
-    let length = int(sqrt(float b.Length))
-    let (a,b,c,d) = (b.[p],b.[p+1],b.[p+length],b.[p+length+1])
+let rotate (board:Board) (p:Position) : Board =
+    let length = int(sqrt(float board.Length))
+    let (a,b,c,d) = (board.[p],board.[p+1],board.[p+length],board.[p+length+1])
+    printfn "%A" (a,b,c,d)
+    board
     //let new_b = b.[0..(pos-1)] @ c @ a @ b.[(pos+2)..(pos+length)] @ d @ b @ b.[(pos+length+1)..]
+
+
+let rec scramble (b:Board) (m:uint) : Board =
+    let rnd = System.Random  ()
+    let boardlenght 
+
 
 
 
 let b1 = (board2Str (create 3u))
-printfn "%A" (rotate b1 1)
+printfn "%A" (rotate2 (create 3u))
