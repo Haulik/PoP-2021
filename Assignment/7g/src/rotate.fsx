@@ -28,7 +28,11 @@ let validRotation (b:Board) (p:Position) : bool =
     | p when p > length * length -> false
     | _ -> true
 
- 
+
+let rotate (b:Board) (p:Position) : Board =
+    let length = int(sqrt(float b.Length)) 
+    let (a,b,c,d) = (b.[p], b.[p+1] ,b.[p+length] ,b.[p+length+1])
+
 
 //sdf
 

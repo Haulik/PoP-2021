@@ -3,21 +3,47 @@ type expr =
     | Add of expr * expr 
     | Mul of expr * expr
     | Sub of expr * expr
-    | Divide of expr * expr
+    | Div of expr * expr
 
-type ('a ,'b) result = Ok of 'a | Err of 'b
+type ('a ,'b) result = OK of 'a | Err of 'b
 
 
 // 7ø14 og 7ø15
 
-// let rec eval (e:expr) : Result<int,string> = 
-//     match e with 
-//     | Add (a,b) -> Ok (eval a) + (eval b) 
-//     | Sub (a,b) -> Ok (eval a) - (eval b) 
-//     | Mul (a,b) -> Ok (eval a) * (eval b)
-//     | Divide (a,b) -> Ok (eval a) / (eval b)
-//     | Const n -> n
-//     | 0 -> Err "Divide by zero"
+let rec eval (e:expr) : (int,string) result = 
+    match e with 
+        | Const c -> OK c
+        | Add (a,b) -> 
+            match eval a with
+                | Err err -> Err err
+                | OK aRes -> 
+                    match eval b with
+                        | Err err -> Err err
+                        | OK bRes -> OK (aRes + bRes)
+        | Sub (a,b) -> 
+            match eval a with
+                | Err err -> Err err
+                | OK aRes -> 
+                    match eval b with
+                        | Err err -> Err err
+                        | OK bRes -> OK (aRes - bRes)
+        | Mul (a,b) -> 
+            match eval a with
+                | Err err -> Err err
+                | OK aRes -> 
+                    match eval b with
+                        | Err err -> Err err
+                        | OK bRes -> OK (aRes * bRes) 
+        | Div (a,b) -> 
+            match eval a with
+                | Err err -> Err err
+                | OK aRes -> 
+                    match eval b with
+                        | Err err -> Err err
+                        | OK 0 -> Err "Divide by zero"
+                        | OK bRes -> OK (aRes / bRes)
+
+        | _ -> Err "Divide by zero"
 
 
 
