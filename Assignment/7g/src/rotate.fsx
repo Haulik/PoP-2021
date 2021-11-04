@@ -7,14 +7,21 @@ let listabc = ['a'..'z']
 let create (n:uint) : Board =
     listabc.[0 .. (int(n)*int(n))-1]
     
+let rec helper (b:Board) (pos:int) (n:int) : string =
+        match b with
+            |[] -> ""
+            |[x] -> x.ToString() + "\n\n"
+            | x :: ys when pos % n = 0 -> "\n" + x.ToString() + (helper ys (pos-1) n)
+            | x :: ys -> x.ToString() + (helper ys (pos-1) n)
 
-let rec board2Str (b:Board) : string =
+let board2Str (b:Board) : string =
     let length = int(sqrt(float b.Length)) 
-    printfn "%d" length
-    match b with
-        |[] -> ""
-        |[x] -> x.ToString()
-        | x :: ys -> x.ToString() + board2Str ys
+    helper b length length
+    //printfn "%d" length
+
+//let validRotation (b:Board) (p:Position) : bool =
+
+ 
 
 
 
