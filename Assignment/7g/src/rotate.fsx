@@ -27,13 +27,6 @@ let validRotate (b:Board) (p:Position) : bool =
         | p when p+1 > length * length -> false
         | _ -> true
 
-(* let rec rotateHelper (b:Board) (p:Position) (index:int) : Board =
-    let len = b.Length
-    match index with
-        | p ->  *)
-
-
-
 let rotate (board:Board) (p:Position) : Board =
     let length = int(sqrt(float board.Length))
     let rotateHelper (i:int) : int =
@@ -58,5 +51,8 @@ let scramble (b:Board) (m:uint) : Board =
             else scrambleHelper b m counter
     scrambleHelper b (int(m)) 0
 
+let solved (b:Board) : bool =   
+    List.sort b = b
 
-printfn "%A" (board2Str(scramble (create 5u) 100u))
+//printfn "%A" (board2Str(scramble (create 5u) 100u))
+printfn "%A" (solved(create 5u))
