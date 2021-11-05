@@ -1,4 +1,4 @@
-//module Rotate
+module Rotate
 
 type Board = char list
 type Position = int
