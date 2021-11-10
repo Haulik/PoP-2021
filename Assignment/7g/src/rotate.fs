@@ -3,10 +3,12 @@ module Rotate
 type Board = char list
 type Position = int
 
-let listabc = ['a'..'z']
-
 let create (n:uint) : Board =
-    listabc.[0 .. (int(n)*int(n))-1]
+    let listabc = ['a'..'z']
+    match n with
+    | n when n < 2 -> listabc.[0 .. 3]
+    | n when n > 5 -> listabc.[0 .. 24]
+    | _ -> listabc.[0 .. (int(n)*int(n))-1]
 
 let rec board2Strhelper (b:Board) (pos:int) (n:int) : string =
     match b with
@@ -22,13 +24,14 @@ let board2Str (b:Board) : string =
 let validRotate (b:Board) (p:Position) : bool =
     let length = int(sqrt(float b.Length))
     match p with    
+        | p when p<0 -> false
         | p when p+1 % length = 0 -> false
         | p when p+1 >= length * length - length -> false
         | p when p+1 > length * length -> false
         | _ -> true
 
-let rotate (board:Board) (p:Position) : Board =
-    let length = int(sqrt(float board.Length))
+let rotate (b:Board) (p:Position) : Board =
+    let length = int(sqrt(float b.Length))
     let rotateHelper (i:int) : int =
         match i with 
             | n when n=p -> p + length 
@@ -36,7 +39,7 @@ let rotate (board:Board) (p:Position) : Board =
             | n when n = p + length + 1 -> p + 1
             | n when n = p + length -> p + length + 1
             | _ -> 0
-    let reslist = List.init (board.Length) (fun i -> if i = p || i = (p + 1) || i = (p + length) || i = (p + length + 1) then board.[(rotateHelper i)] else board.[i])
+    let reslist = List.init (b.Length) (fun i -> if i = p || i = (p + 1) || i = (p + length) || i = (p + length + 1) then b.[(rotateHelper i)] else b.[i])
     reslist
 
 let scramble (b:Board) (m:uint) : Board =   
