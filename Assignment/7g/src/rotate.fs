@@ -6,8 +6,8 @@ type Position = int
 let create (n:uint) : Board =
     let listabc = ['a'..'z']
     match n with
-    | n when n < 2 -> listabc.[0 .. 3]
-    | n when n > 5 -> listabc.[0 .. 24]
+    | n when n < 2u -> listabc.[0 .. 3]
+    | n when n > 5u -> listabc.[0 .. 24]
     | _ -> listabc.[0 .. (int(n)*int(n))-1]
 
 let rec board2Strhelper (b:Board) (pos:int) (n:int) : string =
@@ -31,16 +31,18 @@ let validRotate (b:Board) (p:Position) : bool =
         | _ -> true
 
 let rotate (b:Board) (p:Position) : Board =
-    let length = int(sqrt(float b.Length))
-    let rotateHelper (i:int) : int =
-        match i with 
-            | n when n=p -> p + length 
-            | n when n=p + 1 -> p
-            | n when n = p + length + 1 -> p + 1
-            | n when n = p + length -> p + length + 1
-            | _ -> 0
-    let reslist = List.init (b.Length) (fun i -> if i = p || i = (p + 1) || i = (p + length) || i = (p + length + 1) then b.[(rotateHelper i)] else b.[i])
-    reslist
+    if not <| validRotate b p then b
+    else
+        let length = int(sqrt(float b.Length))
+        let rotateHelper (i:int) : int =
+            match i with 
+                | n when n=p -> p + length 
+                | n when n=p + 1 -> p
+                | n when n = p + length + 1 -> p + 1
+                | n when n = p + length -> p + length + 1
+                | _ -> 0
+        let reslist = List.init (b.Length) (fun i -> if i = p || i = (p + 1) || i = (p + length) || i = (p + length + 1) then b.[(rotateHelper i)] else b.[i])
+        reslist
 
 let scramble (b:Board) (m:uint) : Board =   
     let rnd = System.Random ()
