@@ -25,9 +25,9 @@ let validRotate (b:Board) (p:Position) : bool =
     let length = int(sqrt(float b.Length))
     match p with    
         | p when p<0 -> false
-        | p when p+1 % length = 0 -> false
-        | p when p+1 >= length * length - length -> false
-        | p when p+1 > length * length -> false
+        | p when (p+1) % length = 0 -> false
+        | p when (p+1) >= length * length - length -> false
+        | p when (p+1) > length * length -> false
         | _ -> true
 
 let rotate (b:Board) (p:Position) : Board =
