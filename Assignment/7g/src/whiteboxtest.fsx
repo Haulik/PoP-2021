@@ -49,3 +49,7 @@ printfn "b: ['a'..'i']      p: -1       branch : 1a       Expected: false"
 printfn "Result %b" (Rotate.validRotate (Rotate.create 3u) -1)
 printfn "passed: %b" (Rotate.validRotate (Rotate.create 3u) -1 = false)
 printfn ""
+printfn "Whitebox test of rotate (b:Board) (p:Position) : Board"
+printfn "b: ['a'..'i']      p: -1        branch : 1a      Expected: ['a';'b';'c';'d';'e';'f';'g';'h';'i']"
+printfn "Result %A" (Rotate.rotate (Rotate.create 3u) -1)
+printfn "passed: %b" (Rotate.rotate (Rotate.create 3u) -1 = ['a'..'i'])
