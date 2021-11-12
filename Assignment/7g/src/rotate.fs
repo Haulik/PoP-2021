@@ -59,6 +59,5 @@ let scramble (b:Board) (m:uint) : Board =
 let solved (b:Board) : bool =   
     List.sort b = b
 
-//printfn "%A" (board2Str(scramble (create 5u) 100u))
 printfn "%A" (solved(create 5u))
 
