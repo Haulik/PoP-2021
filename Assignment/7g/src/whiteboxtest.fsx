@@ -64,7 +64,18 @@ printfn "passed: %b" (Rotate.rotate (Rotate.create 3u) 0 = ['d';'a';'c';'e';'b';
 printfn ""
 
 printfn "Whitebox test of scramble (b:Board) (m:uint) : Board"
-printfn "b: ['a'..'i']      m: "
+printfn "b: ['a'..'i']      m: 0        branch : 1a          Expected: ['a'..'i']"
+printfn "Result %A" (Rotate.scramble (Rotate.create 3u) 0u)
+printfn "passed %b" (Rotate.scramble (Rotate.create 3u) 0u = ['a'..'i'])
+printfn ""
+printfn "b: ['a'..'i']      m: 3        branch : 1b          Expected: b != Result"
+printfn "Result %A" (Rotate.scramble (Rotate.create 3u) 3u)
+printfn "passed %b" (Rotate.scramble (Rotate.create 3u) 3u <> ['a'..'i'] )
+printfn ""
+printfn "b: ['a'..'y']      m: 15        branch : 1b          Expected: b != Result"
+printfn "Result %A" (Rotate.scramble (Rotate.create 5u) 15u)
+printfn "passed %b" (Rotate.scramble (Rotate.create 5u) 15u <> ['a'..'i'] )
+printfn ""
 
 printfn "Whitebox test of solved (b:Board) : bool"
 printfn "b: ['a'..'i']      branch : 1a         Expected: true"
