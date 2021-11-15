@@ -22,13 +22,15 @@ let board2Str (b:Board) : string =
     board2Strhelper b length length
 
 let validRotate (b:Board) (p:Position) : bool =
-    let length = int(sqrt(float b.Length))
-    match p with    
-        | p when p<0 -> false
-        | p when (p+1) % length = 0 -> false
-        | p when (p+1) >= length * length - length -> false
-        | p when (p+1) > length * length -> false
-        | _ -> true
+    if b.Length = 0 then false
+    else 
+        let length = int(sqrt(float b.Length))
+        match p with    
+            | p when p<0 -> false
+            | p when (p+1) % length = 0 -> false
+            | p when (p+1) >= length * length - length -> false
+            | p when (p+1) > length * length -> false
+            | _ -> true
 
 let rotate (b:Board) (p:Position) : Board =
     if not <| validRotate b p then b
@@ -45,16 +47,18 @@ let rotate (b:Board) (p:Position) : Board =
         reslist
 
 let scramble (b:Board) (m:uint) : Board =   
-    let rnd = System.Random ()
-    let boardlength = b.Length
-    let rec scrambleHelper (b:Board) (m:int) (counter:int) : Board =
-        if counter >= m then 
-            b
-        else
-            let n = (rnd.Next boardlength)
-            if (validRotate b n) then scrambleHelper (rotate b n) m (counter+1)
-            else scrambleHelper b m counter
-    scrambleHelper b (int(m)) 0
+    if b.Length = 0 then b
+    else 
+        let rnd = System.Random ()
+        let boardlength = b.Length
+        let rec scrambleHelper (b:Board) (m:int) (counter:int) : Board =
+            if counter >= m then 
+                b
+            else
+                let n = (rnd.Next boardlength)
+                if (validRotate b n) then scrambleHelper (rotate b n) m (counter+1)
+                else scrambleHelper b m counter
+        scrambleHelper b (int(m)) 0
 
 let solved (b:Board) : bool =   
     List.sort b = b
