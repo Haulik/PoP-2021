@@ -36,8 +36,8 @@ let rotate (b:Board) (p:Position) : Board =
         let length = int(sqrt(float b.Length))
         let rotateHelper (i:int) : int =
             match i with 
-                | n when n=p -> p + length 
-                | n when n=p + 1 -> p
+                | n when n = p -> p + length 
+                | n when n = p + 1 -> p
                 | n when n = p + length + 1 -> p + 1
                 | n when n = p + length -> p + length + 1
                 | _ -> 0
@@ -58,6 +58,3 @@ let scramble (b:Board) (m:uint) : Board =
 
 let solved (b:Board) : bool =   
     List.sort b = b
-
-printfn "%A" (solved(create 5u))
-
