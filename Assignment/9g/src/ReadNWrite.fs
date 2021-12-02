@@ -1,4 +1,4 @@
-// module ReadNWrite
+module ReadNWrite
 
 (* let readFile (filename: string) : string option =
     try
@@ -34,11 +34,14 @@ let tac (filenames: string list) : string option =
         let mutable output = ""
         for file in filenames do    
             output <- output + (readFile file |> Option.get)
-        output <- output.Split(System.Environment.NewLine)
-        output <- Array.rev (Array.rev (output.ToCharArray()))
-        output <- System.String(Array.rev (output.ToCharArray()))
-        output <- output.Replace("n\\","\\n")
-        output <- output.[2..] + "\\n"
-        Some output
+        let mutable words = (output.Split(System.Environment.NewLine)) |> Array.toList
+        words <- List.map (Array.rev (words.ToCharArray())) (List.ofArray words)
+        words <- List.map (fun x -> x + "\\n") words
+        //output <- Array.rev (Array.rev (output.ToCharArray()))
+        //output <- System.String(Array.rev (output.ToCharArray()))
+        //output <- output.Replace("n\\","\\n")
+        Some words
     with
         | _ -> None
+
+printfn "%A" (tac ["a.txt";"b.txt"])
