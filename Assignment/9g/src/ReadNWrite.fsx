@@ -4,28 +4,32 @@ let readFile (filename:string) : string option =
         let mutable input = ""
         while not (reader.EndOfStream) do
             input <- input + (char (reader.Read())).ToString()
-            //printf "%c" (char input)
         reader.Close()
-        //let 2char = (char input)
         Some (input)
     with
         | _-> None
 
 
 let cat (filenames:string list) : string option =
-    let mutable cat = ""
-    for i in filenames do
-        cat <- cat + (readFile i |> Option.get)
-    Some cat 
+    try
+        let results = List.choose (fun elem ->
+            match elem with
+            | elem -> readFile elem) filenames
+        //Some (results |> List.fold (fun r s -> r + s) "")
+        Some (System.String.Concat(results))
+    with 
+        | _ -> None
+     
 
 
 let tac (filenames:string list) : string option =
-    let mutable reverse = ""
-    let mutable tac = ""
-    for i in filenames do
-        tac <- tac + (readFile i |> Option.get)
-    tac <- System.String(Array.rev (tac.ToCharArray()))
-   // tac <- System.String(Array.rev (tac.ToCharArray()))
-    Some tac
-
-printfn "%A" (tac ["a.txt";"b.txt"])
+    try
+        let reverse (str:string) : string =
+            System.String(Array.rev (str.ToCharArray()))
+        let concat = ((cat filenames) |> Option.get)
+        let arr = concat.Split("\\n") |> Array.toList
+        let arrWS = List.filter (fun x -> x <> "") arr
+        let reverselist = (List.map (fun elm -> reverse elm + "\\n" ) arrWS) |> List.rev
+        Some (System.String.Concat(reverselist))
+    with 
+        | _ -> None
