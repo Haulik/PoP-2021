@@ -36,10 +36,10 @@ let rec colorAt (x,y) figure =
                                  (g1+g2)/2, (b1+b2)/2)) // average color
 
 
-//let C = ImgUtil.mk 265 265
 let cir = Circle ((50,50), 45, (ImgUtil.fromRgb (255 ,0 ,0)))
 let rect = Rectangle ((50,50), (90,110), (ImgUtil.fromRgb (0 ,0 ,255)))
-let figTest = Mix (cir,rect)
+let figTest : figure = 
+    Mix (cir,rect)
 
 
 ///<summary>Creates a png file of a figure</summary>
@@ -94,14 +94,3 @@ let rec boundingBox (fig:figure) : point * point =
             (p1,p2)
             
             
-
-
-//do makePicture "test.png" figTest 100 150
-printfn "%b" (checkFigure figTest)
-do makePicture "moveTest.png" (move figTest (-20,20)) 100 150
-printfn "%A" (boundingBox figTest)
-
-//let q = ImgUtil.init 265 265 mix 
-//do ImgUtil.setPixel (ImgUtil.fromRgb (255 ,0 ,0)) (10 ,10) C
-//do ImgUtil.toPngFile "test2.png" q
-    
