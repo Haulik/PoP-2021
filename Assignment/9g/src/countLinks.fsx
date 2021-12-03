@@ -1,6 +1,9 @@
 open System.Net
 open System
 
+///<summary>Counts the amount of links on a website</summary>
+///<param name="url">The URL of the website which is searched for links</param>
+///<returns>An int, the amount of links found on the site.</returns>
 let countLinks (url:string) : int =
     try
         let fetchUrl (url:string) : string =
