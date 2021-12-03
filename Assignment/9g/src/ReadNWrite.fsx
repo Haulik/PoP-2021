@@ -12,6 +12,7 @@ let readFile (filename:string) : string option =
     with
         | _-> None
 
+
 ///<summary>Reads the content of multiple files and concatenates them to one string</summary>
 ///<param name="filenames">A string list of the filenames that are read</param>
 ///<returns>A string option containing the concatenated string, or None if an exception is raised.</returns>
@@ -24,6 +25,7 @@ let cat (filenames:string list) : string option =
         Some (System.String.Concat(results))
     with 
         | _ -> None
+     
      
 ///<summary>Reverses the order of the lines in the given files, and reverses the order of the characters on every line</summary>
 ///<param name="filenames">A string list of the filenames that are read</param>
