@@ -1,3 +1,6 @@
+///<summary>Opens the file 'filename' and reads the entire contents as string. </summary>
+///<param name="filename">The name/directory of the file to be opened, as a string</param>
+///<returns>A string option, containing the contents of the document if it succeeds, or None if an exception is raised.</returns>
 let readFile (filename:string) : string option =
     try
         let reader = System.IO.File.OpenText filename
@@ -9,7 +12,9 @@ let readFile (filename:string) : string option =
     with
         | _-> None
 
-
+///<summary>Reads the content of multiple files and concatenates them to one string</summary>
+///<param name="filenames">A string list of the filenames that are read</param>
+///<returns>A string option containing the concatenated string, or None if an exception is raised.</returns>
 let cat (filenames:string list) : string option =
     try
         let results = List.choose (fun elem ->
@@ -20,8 +25,9 @@ let cat (filenames:string list) : string option =
     with 
         | _ -> None
      
-
-
+///<summary>Reverses the order of the lines in the given files, and reverses the order of the characters on every line</summary>
+///<param name="filenames">A string list of the filenames that are read</param>
+///<returns>The reversed string as a string option, or None if an exception is raised.</returns>
 let tac (filenames:string list) : string option =
     try
         let reverse (str:string) : string =
