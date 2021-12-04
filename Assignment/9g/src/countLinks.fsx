@@ -24,4 +24,14 @@ let countLinks (url:string) : int =
     with 
         | _ -> 1
 
-printfn "%d" (countLinks  "https://www.erdetfredag.dk/")
+///<summary>Calls the countLinks-function with the input given in the commandline</summary>
+///<param name="args">The input from the commandline, as a string array</param>
+///<returns>0 if no exceptions are raised, 1 otherwise</returns>
+[<EntryPoint>]
+let main (args: string array) : int =
+    try 
+        let url = args.[0]
+        printfn "%A" (countLinks url)
+        0
+    with
+        | _ -> 1
