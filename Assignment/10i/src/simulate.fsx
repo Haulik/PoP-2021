@@ -11,7 +11,7 @@ let len (x: float, y: float) =
     sqrt(x**2.0 + y**2.0)
 
 ///<summary>Calculates the Subtraction of two vectors</summary>
-///<param name="x1,y1">A tuble of floats</param>
+///<param name="x1,y)">A tuble of floats</param>
 ///<param name="x2,y2">A tuble of floats</param>
 ///<returns>Returns the Subtraction of two vectors</returns>
 let sub (x1:float, y1:float) (x2:float, y2:float)  = 
@@ -66,7 +66,6 @@ type Airspace (drone:Drone list) =
     ///<param name="j">An as a drone</param>
     ///<returns>Returns the calculated distance between two drones as an Integer</returns>
     member this.DroneDist(i:Drone, j:Drone) = 
-        printfn "%A" (ToInt(len(sub(float(fst(i.Position)), float(snd(i.Position))) (float(fst(j.Position)), float(snd(j.Position))))))
         ToInt(len(sub(float(fst(i.Position)), float(snd(i.Position))) (float(fst(j.Position)), float(snd(j.Position)))))
     
     ///<summary>Makes all drones in the list of drones fly one time</summary>
@@ -87,9 +86,8 @@ type Airspace (drone:Drone list) =
             this.FlyDrones()
         for i = 0 to Drones.Length - 1 do
             for j = i+1 to Drones.Length - 1 do
-                //printfn "i %A and j %A %b and %b" i j (Drones.Item(i).AtDestination()) (Drones.Item(i).AtDestination())
                 if this.DroneDist(Drones.Item(i), Drones.Item(j)) <= 5 then
-                    list <- list @ [(getCharForNumber i, getCharForNumber j)] //[drone.Item(i);drone.Item(i+1)] 
+                    list <- list @ [(getCharForNumber i, getCharForNumber j)]
         list
                         
 
@@ -135,16 +133,24 @@ printfn "Test of properties get()                             Result:%A, %A, %d 
 drone3.Fly()
 printfn "fly() with speed 20                                  Result: %A               Expected: (28,4)                  |passed: %b " (drone3.Position) (drone3.Position = (28,4))
 printfn "AtDestination() position (28,4) destination(28,4)    Result: %b                  Expected: True                    |passed: %b " (drone3.AtDestination()) (drone3.AtDestination() = true)
-
+printfn ""
 
 
 let airspace1 = Airspace([drone1;drone2;drone3])
 printfn "Blackbox test of class Airspace"
-printfn "New airspace1 = Drone((1,1),(55,55),1)"
+printfn "New airspace1 = Airspace([drone1;drone2;drone3])"
 
-airspace1.DroneDist
-airspace1.FlyDrones
-airspace1.WillCollide
+printfn "Test DroneDist() on (2,1) and (13,3)                  Result:%d                             Expected: 12                               |passed: %b " (airspace1.DroneDist(drone1,drone2))  (airspace1.DroneDist(drone1,drone2) = 12)
+airspace1.FlyDrones()
+printfn "Test FlyDrones() on (2,1), (13,3) (28,4)              Result:%A, %A, %A       Expected: (3,1), (19,3), (28,4)            |passed: %b " (drone1.Position) (drone2.Position) (drone3.Position)  (drone1.Position = (3,1) && drone2.Position = (19,3) && drone3.Position = (28,4))
+printfn "Test WillCollide(2)                                   Result:%A                             Expected: []                               |passed: %b" (airspace1.WillCollide(2)) (airspace1.WillCollide(2) = [])
+airspace1.AddDrone((5,1),(55,55),1)
+printfn "Test WillCollide(5)                                   Result:%A                   Expected: [('A', 'D')]                     |passed: %b" (airspace1.WillCollide(5)) (airspace1.WillCollide(2) = [('A', 'D')])
+airspace1.AddDrone((1000,20),(37,96),4)
+airspace1.AddDrone((1000,20),(85,56),4)
+airspace1.AddDrone((1000,20),(32,64),4)
+let ext = [('A', 'D'); ('E', 'F'); ('E', 'G'); ('F', 'G')]
+printfn "Test if three drones Collide     Result:%A   Expected: %A      |passed: %b" (airspace1.WillCollide(1)) (ext) (airspace1.WillCollide(2) = [('A', 'D'); ('E', 'F'); ('E', 'G'); ('F', 'G')])
 airspace1.AddDrone
 
 
