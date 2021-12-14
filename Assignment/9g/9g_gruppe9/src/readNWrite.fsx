@@ -1,4 +1,4 @@
-module ReadNWrite
+//module ReadNWrite
 
 let readFile (filename: string) : string option = 
     try
@@ -7,16 +7,17 @@ let readFile (filename: string) : string option =
         while not (reader.EndOfStream) do
             input <- input + (char (reader.Read())).ToString()
         reader.Close()
+        if input = "" then
+            raise(System.ArgumentException())
         Some (input)
     with
-        | _-> None
+        | _-> raise(System.ArgumentException("Some None"))
 
 let cat (filenames: string list) : string option =
     try
         let results = List.choose (fun elem ->
             match elem with
             | elem -> readFile elem) filenames
-        //Some (results |> List.fold (fun r s -> r + s) "")
         Some (System.String.Concat(results))
     with 
         | _ -> None
@@ -32,3 +33,7 @@ let tac (filenames: string list) : string option =
         Some (System.String.Concat(reverselist))
     with 
         | _ -> None
+
+printfn "%A" (cat ["";""])
+printfn "%A" (tac ["";""])
+printfn "%A" (readFile "")
