@@ -4,7 +4,6 @@ type Action =
     | Stop of Position
     | Continue of Direction * Position
     | Ignore
-
 type BoardDisplay(rows:int,columns:int) =
     let EmptyArray = Array2D.init rows columns (fun x y -> 
         match (x,y) with
@@ -77,11 +76,9 @@ and Goal(row:int, col:int) =
         gameover
     override this.RenderOn (board:BoardDisplay) =
         board.Set((fst this.Position),(snd this.Position),"GO") 
-    //override this.Interact (other:Robot) (dir:Direction) = Ignore 
 
 and BoardFrame(row:int,col:int) =
     inherit BoardElement()
-    //member this.Position with get() = (row,col) //NOTE: Here, Position is actually the dimensions of the board
     override this.RenderOn (board:BoardDisplay) = () //boardframes are rendered by default
     override this.Interact (other:Robot) (dir:Direction) =
         let robotrow,robotcol = other.Position
@@ -94,28 +91,58 @@ and BoardFrame(row:int,col:int) =
 
 and VerticalWall(row:int,col:int,n:int) =
     inherit BoardElement()
+    member this.Length = n
     member this.Position with get() = (row,col)
-    override this.RenderOn (board:BoardDisplay) = board.SetRightWall(row,col)
+    override this.RenderOn (board:BoardDisplay) = 
+        let (+) a k =  //helper function to calculate location on wall depending on whether n is positive or negative
+            if this.Length >= 0 then a+k else a-k
+        for k=0 to (abs this.Length) do
+            if 0 < ((+) row k) && ((+) row k) <= board.Rows then board.SetRightWall(((+) row k),col)
     override this.Interact (other:Robot) (dir:Direction) =
         let robotrow,robotcol = other.Position
         match dir with
-            | East when other.Position = this.Position -> Stop (robotrow,robotcol)
-            | West when robotrow = row && robotcol = col+1 -> Stop (robotrow,robotcol)
+            | East when robotcol = col && (min row (row+this.Length)) <= robotrow && robotrow <= (max row (row+this.Length)) -> Stop (robotrow,robotcol)
+            | West when robotcol = col+1 && (min row (row+this.Length)) <= robotrow && robotrow <= (max row (row+this.Length)) -> Stop (robotrow,robotcol)
             | _ -> Ignore
-
 
 and HorizontalWall(row:int,col:int,n:int) =
     inherit BoardElement()
+    member this.Length = n
     member this.Position with get() = (row,col)
-    override this.RenderOn (board:BoardDisplay) = board.SetBottomWall(row,col)
+    override this.RenderOn (board:BoardDisplay) = 
+        let (+) a k = 
+            if this.Length >= 0 then a+k else a-k
+        for k=0 to (abs this.Length) do
+            if 0 < ((+) col k) && ((+) col k) <= board.Columns then board.SetBottomWall(row,((+) col k))
     override this.Interact (other:Robot) (dir:Direction) =
         let robotrow,robotcol = other.Position
         match dir with
-            | South when other.Position = this.Position -> Stop (robotrow,robotcol)
-            | North when robotcol = col && robotrow = row+1 -> Stop (robotrow,robotcol)
+            | South when robotrow = row && (min col (col+this.Length)) <= robotcol && robotcol <= (max col (col+this.Length)) -> Stop (robotrow,robotcol)
+            | North when robotrow = row+1 && (min col (col+this.Length)) <= robotcol && robotcol <= (max col (col+this.Length)) -> Stop (robotrow,robotcol)
             | _ -> Ignore
     
         
+//Tests:
+let b = BoardDisplay(4,7)
+//b.SetBottomWall(1,1)
+b.SetRightWall(1,1)
+b.SetRightWall(2,2)
+b.Set(1,1,"T ")
+b.Set(3,3,"AA")
+b.Set(3,4,"BB")
+b.Print()
+let g = Goal(4,4)
+g.RenderOn b
+let w = VerticalWall(3,3,5)
+w.RenderOn b
+let h = HorizontalWall(1,2,6)
+h.RenderOn b
+let robert = Robot(3,3,"RO")
+robert.RenderOn b
+printfn "%A" (w.Interact robert East)
+b.Show()
+
+
 (* 
 ("TT|", "--+") ("   ", "  +")
 
@@ -129,17 +156,6 @@ and HorizontalWall(row:int,col:int,n:int) =
 |                    |
 +--+--+--+--+--+--+--+
  *)
-
-let b = BoardDisplay(4,7)
-b.SetBottomWall(1,1)
-b.SetRightWall(1,1)
-b.SetRightWall(2,2)
-b.Set(1,1,"T")
-b.Set(3,3,"AA")
-b.Set(3,4,"BB")
-b.Print()
-b.Show()
-(* ("AA|","--+")
 
 AA|
 --+
