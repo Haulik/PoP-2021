@@ -47,14 +47,14 @@ type BoardElement () =
 and Robot(row:int, col:int, name:string) = 
     inherit BoardElement()
     let mutable position = (row, col)
-    member this.Position with get() = position
+    member this.Position with get() = position and set(p) = position <- p
     override this.Interact (other:Robot) (dir:Direction) = 
         let robotrow,robotcol = other.Position
         match dir with
-            | North when robotrow = (fst position - 1) && robotrow = (snd position) -> Stop(other.Position) 
-            | South when robotrow = (fst position + 1)  && robotrow = (snd position) -> Stop(other.Position) 
-            | East when robotcol = (snd position + 1)  && robotcol = (fst position) -> Stop(other.Position) 
-            | West when robotcol = (snd position - 1)  && robotcol = (fst position) -> Stop(other.Position) 
+            | North when robotrow = (fst position + 1) && robotcol = (snd position) -> Stop(other.Position) 
+            | South when robotrow = (fst position - 1)  && robotcol = (snd position) -> Stop(other.Position) 
+            | East when robotcol = (snd position - 1)  && robotrow = (fst position) -> Stop(other.Position) 
+            | West when robotcol = (snd position + 1)  && robotrow = (fst position) -> Stop(other.Position) 
             | _ -> Ignore
 
     override this.RenderOn (board:BoardDisplay) = board.Set((fst this.Position),(snd this.Position),name)
