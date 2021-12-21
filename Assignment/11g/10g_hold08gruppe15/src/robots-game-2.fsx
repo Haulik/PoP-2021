@@ -1,9 +1,15 @@
+///<summary> </summary>
+///<param> </param>
+///<returns> </returns>
 type Direction = North | South | East | West 
 type Position = int * int
 type Action =
     | Stop of Position
     | Continue of Direction * Position
     | Ignore
+///<summary>BoardDisplay works by storing the individual fields in an Array2D. It has methods for setting the content of the fields, and a BuildString method which converts the array to a string</summary>
+///<param name="rows">The amount of rows in the board</param>
+///<param name="cols">The amount of columns in the board</param>
 type BoardDisplay(rows:int,columns:int) =
     let EmptyArrayBuilder x y =    
         match (x,y) with
@@ -38,7 +44,6 @@ type BoardDisplay(rows:int,columns:int) =
         board
     member this.Show() = do printfn "%A" (this.BuildString())
 
-//11g1
 [<AbstractClass>] 
 type BoardElement () =
     abstract member RenderOn : BoardDisplay -> unit
@@ -47,6 +52,10 @@ type BoardElement () =
     abstract member GameOver : Robot list -> bool
     default __.GameOver _ = false
 
+///<summary>The robot class. The Interact method stops other robots from entering the same field, the RenderOn method places the robots name on the board, and the Steop method changes the position of the robot by 1 in a given direction</summary>
+///<param name="row">The row of the robots position</param>
+///<param name="col">The column of the robots position</param>
+///<param name="name">The robots name - this must always be exactly two characters.</param>
 and Robot(row:int, col:int, name:string) = 
     inherit BoardElement()
     let mutable position = (row, col)
@@ -69,6 +78,9 @@ and Robot(row:int, col:int, name:string) =
             | East -> position <- (fst position,(snd position) + 1)
             | West -> position <- (fst position,(snd position) - 1)
 
+///<summary>The goal object has the GameOver method, which returns true if one of the robots has stopped in the goal.</summary>
+///<param name="row">The row of the goals position</param>
+///<param name="col">The column of the goals position</param>
 and Goal(row:int, col:int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -80,7 +92,9 @@ and Goal(row:int, col:int) =
     override this.RenderOn (board:BoardDisplay) =
         board.Set((fst this.Position),(snd this.Position),"GO") 
 
-
+///<summary>The boardframe is the outer edge of the board. The interact method returns Stop when the robot is at the edge of the board</summary>
+///<param name="row">The total amount of rows in the board</param>
+///<param name="col">The total amount of columns in the board</param>
 and BoardFrame(row:int,col:int) =
     inherit BoardElement()
     override this.RenderOn (board:BoardDisplay) = () //boardframes are rendered by default
@@ -93,6 +107,10 @@ and BoardFrame(row:int,col:int) =
             | West when robotcol = 1 -> Stop (robotrow,robotcol)
             | _ -> Ignore
 
+///<summary>The VerticalWall is a wall in the playing field with length n. The RenderOn method sets walls in the n fields that are adjacent to the starting location, and the Interact function returns Stop when the robot tries to move into the wall </summary>
+///<param name="row">The row of the walls position</param>
+///<param name="col">The column of the walls position</param>
+///<param name="n">The length of the wall. If n is negative, the wall goes towards north from the starting point, if it is positive, it goes towards south.</param>
 and VerticalWall(row:int,col:int,n:int) =
     inherit BoardElement()
     member this.Length = n
@@ -109,6 +127,7 @@ and VerticalWall(row:int,col:int,n:int) =
             | West when robotcol = col+1 && (min row (row+this.Length)) <= robotrow && robotrow <= (max row (row+this.Length)) -> Stop (robotrow,robotcol)
             | _ -> Ignore
 
+///<summary>The HorizontalWall is similar to the VerticalWall, except it is horizontal. Positive n-values indicate that the wall goes towards east, and vice versa. </summary>
 and HorizontalWall(row:int,col:int,n:int) =
     inherit BoardElement()
     member this.Length = n
@@ -126,16 +145,58 @@ and HorizontalWall(row:int,col:int,n:int) =
             | _ -> Ignore
 
 
-//11g2
+///<summary>Backslashwall bounces the robot in a new direction.</summary>
+///<param> </param>
+///<returns> </returns>
+and Backslashwall(row:int,col:int,board:int*int) =
+    inherit BoardElement()
+    member this.Position with get() = (row,col)
+    override this.RenderOn (board:BoardDisplay) =
+        board.Set((fst this.Position),(snd this.Position)," \\") 
+    override this.Interact (other:Robot) (dir:Direction) =
+        let robotrow,robotcol = other.Position
+        match dir with
+            | North when (robotrow,robotcol) = (row,col) && row <> 1 -> Continue (West, (robotrow,robotcol - 1)) 
+            | South when (robotrow,robotcol) = (row,col) && row <> snd board -> Continue (East, (robotrow,robotcol + 1))
+            | East when (robotrow,robotcol) = (row,col) && col <> fst board -> Continue (South, (robotrow + 1,robotcol))
+            | West when (robotrow,robotcol) = (row,col) && col <> 1 -> Continue (North, (robotrow - 1,robotcol))
+            | _ -> Ignore
+
+///<summary> </summary>
+///<param> </param>
+///<returns> </returns>
+and Telepoter(row:int,col:int,tp:Position,board:int*int) =
+    inherit BoardElement()
+    member this.Position with get() = (row,col)
+    override this.RenderOn (board:BoardDisplay) =
+        board.Set((fst this.Position),(snd this.Position),"TP") 
+    override this.Interact (other:Robot) (dir:Direction) =
+        let mutable robotrow,robotcol = other.Position
+        match dir with
+            | North when (robotrow,robotcol) = (row,col) && fst tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (North, (robotrow - 1,robotcol))
+            | South when (robotrow,robotcol) = (row,col) && fst tp <> snd board -> robotrow <- fst tp; robotcol <- snd tp; Continue (South, (robotrow + 1,robotcol))
+            | East when (robotrow,robotcol) = (row,col) && snd tp <> fst board -> robotrow <- fst tp; robotcol <- snd tp; Continue (East, (robotrow,robotcol + 1)) 
+            | West when (robotrow,robotcol) = (row,col) && snd tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (West, (robotrow,robotcol - 1)) 
+            | _ -> Ignore
+
+
 type Board(rows:int,cols:int) = 
     let SetupBoard () = 
+
         let frame = BoardFrame(rows,cols)
-        let goal = Goal(System.Random().Next(1,rows),System.Random().Next(1,cols))
+        let goal = Goal(System.Random().Next(2,rows),System.Random().Next(1,cols))
         let hwall = HorizontalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let vwall = VerticalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let hwall2 = HorizontalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let vwall2 = VerticalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
-        let startelements : list<BoardElement> = [(frame :> BoardElement); (goal :> BoardElement); (hwall :> BoardElement); (vwall :> BoardElement); (hwall2 :> BoardElement); (vwall2 :> BoardElement)]
+        let backslash = Backslashwall(System.Random().Next(2,rows),System.Random().Next(1,cols),(rows,cols))
+        
+        let tp1 = (System.Random().Next(2,rows), System.Random().Next(1,cols))
+        let tp2 = (System.Random().Next(2,rows), System.Random().Next(1,cols))
+        let Telepoter1 = Telepoter(fst tp1,snd tp1, tp2, (rows,cols))
+        let Telepoter2 = Telepoter(fst tp2,snd tp2, tp1, (rows,cols))
+
+        let startelements : list<BoardElement> = [(frame :> BoardElement); (goal :> BoardElement); (hwall :> BoardElement); (vwall :> BoardElement); (hwall2 :> BoardElement); (vwall2 :> BoardElement); (backslash :> BoardElement); (Telepoter1 :> BoardElement); (Telepoter2 :> BoardElement)]
         startelements
     let mutable elements = SetupBoard()
     let mutable robots = []
@@ -179,7 +240,7 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
             b.AddRobot name
     do setup
     member this.PrintRobots() =
-        List.iteri (fun x _ -> printfn "%A: %A" (x) (b.Robots.[x].Name)) b.Robots //prints the list of robots and their index
+        List.iteri (fun x _ -> printfn "%A: %A" (x+1) (b.Robots.[x].Name)) b.Robots //prints the list of robots and their index
     member this.PrintGameOver() =
         System.Console.Clear()
         do printfn "----------------------\nCongratulations, you won!\n----------------------"
@@ -192,21 +253,21 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
             printfn "Select a robot number:"
             let robotnr = System.Console.ReadKey(true)
             try
-                selectedrobot <- b.Robots.[((robotnr.KeyChar.ToString()) |> int)]
+                selectedrobot <- b.Robots.[((robotnr.KeyChar.ToString()) |> int)-1]
             with _ -> 
                 do printfn "Please enter a valid robot number"
                 chooserobot ()
         let rec moveloop () =
             let input = System.Console.ReadKey(true)
             match input with
-            | key when key.Key = System.ConsoleKey.UpArrow -> b.Move(selectedrobot,North)
-            | key when key.Key = System.ConsoleKey.DownArrow -> b.Move(selectedrobot,South)
-            | key when key.Key = System.ConsoleKey.RightArrow -> b.Move(selectedrobot,East)
-            | key when key.Key = System.ConsoleKey.LeftArrow -> b.Move(selectedrobot,West)
-            | key when key.Key = System.ConsoleKey.Enter -> 
-                chooserobot ()
-                moveloop ()
-            | _ -> ()
+                | key when key.Key = System.ConsoleKey.UpArrow -> b.Move(selectedrobot,North)
+                | key when key.Key = System.ConsoleKey.DownArrow -> b.Move(selectedrobot,South)
+                | key when key.Key = System.ConsoleKey.RightArrow -> b.Move(selectedrobot,East)
+                | key when key.Key = System.ConsoleKey.LeftArrow -> b.Move(selectedrobot,West)
+                | key when key.Key = System.ConsoleKey.Enter -> 
+                    chooserobot ()
+                    moveloop ()
+                | _ -> ()
             System.Console.Clear()
             b.RenderElements()
             if b.GameOver then this.PrintGameOver()
@@ -215,5 +276,5 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
         moveloop ()
 
 //To start the game:
-let g = Game(7,7,["AA";"BB"])
-g.Play()
+let g = Game(7,7,["AA";"BB";"CC";"DD"])
+g.Play() 
