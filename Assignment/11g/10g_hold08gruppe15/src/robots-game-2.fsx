@@ -38,6 +38,7 @@ type BoardDisplay(rows:int,columns:int) =
         board
     member this.Show() = do printfn "%A" (this.BuildString())
 
+//11g1
 [<AbstractClass>] 
 type BoardElement () =
     abstract member RenderOn : BoardDisplay -> unit
@@ -123,7 +124,9 @@ and HorizontalWall(row:int,col:int,n:int) =
             | South when robotrow = row && (min col (col+this.Length)) <= robotcol && robotcol <= (max col (col+this.Length)) -> Stop (robotrow,robotcol)
             | North when robotrow = row+1 && (min col (col+this.Length)) <= robotcol && robotcol <= (max col (col+this.Length)) -> Stop (robotrow,robotcol)
             | _ -> Ignore
-    
+
+
+//11g2
 type Board(rows:int,cols:int) = 
     let SetupBoard () = 
         let frame = BoardFrame(rows,cols)
