@@ -128,6 +128,9 @@ and VerticalWall(row:int,col:int,n:int) =
             | _ -> Ignore
 
 ///<summary>The HorizontalWall is similar to the VerticalWall, except it is horizontal. Positive n-values indicate that the wall goes towards east, and vice versa. </summary>
+///<param name="row">The row of the walls position</param>
+///<param name="col">The column of the walls position</param>
+///<param name="n">The length of the wall. If n is negative, the wall goes towards north from the starting point, if it is positive, it goes towards south</param>
 and HorizontalWall(row:int,col:int,n:int) =
     inherit BoardElement()
     member this.Length = n
@@ -146,8 +149,9 @@ and HorizontalWall(row:int,col:int,n:int) =
 
 
 ///<summary>Backslashwall bounces the robot in a new direction.</summary>
-///<param> </param>
-///<returns> </returns>
+///<param name="row">The row of the walls position</param>
+///<param name="col">The column of the walls position</param>
+///<param name="board">a board of type (int,int)</param>
 and Backslashwall(row:int,col:int,board:int*int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -162,9 +166,10 @@ and Backslashwall(row:int,col:int,board:int*int) =
             | West when (robotrow,robotcol) = (row,col) && col <> 1 -> Continue (North, (robotrow - 1,robotcol))
             | _ -> Ignore
 
-///<summary> </summary>
-///<param> </param>
-///<returns> </returns>
+///<summary>A teleporter which teleports the robot if accessed</summary>
+///<param name="row">The row of the teleporter position</param>
+///<param name="col">The column of the teleporter position</param>
+///<param name="board">a board of type (int,int)</param>
 and Telepoter(row:int,col:int,tp:Position,board:int*int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -179,10 +184,11 @@ and Telepoter(row:int,col:int,tp:Position,board:int*int) =
             | West when (robotrow,robotcol) = (row,col) && snd tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (West, (robotrow,robotcol - 1)) 
             | _ -> Ignore
 
-
+///<summary>The Board of the game, it holds all elements to make the game playable</summary>
+///<param name="rows">The number of rows of a Board</param>
+///<param name="cols">The number of columns of a Board</param>
 type Board(rows:int,cols:int) = 
     let SetupBoard () = 
-
         let frame = BoardFrame(rows,cols)
         let goal = Goal(System.Random().Next(2,rows),System.Random().Next(1,cols))
         let hwall = HorizontalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
@@ -230,6 +236,9 @@ type Board(rows:int,cols:int) =
         for e in this.Elements do e.RenderOn (this.Display)
         this.Display.Show()
 
+///<summary> </summary>
+///<param> </param>
+///<returns> </returns>
 type Game(rows:int,cols:int,n:string list) = //the string list contains robot names, their length must be exactly two characters
     let b = Board(rows,cols)
     let rec setup =
