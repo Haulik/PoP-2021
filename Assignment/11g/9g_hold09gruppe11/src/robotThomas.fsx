@@ -126,19 +126,55 @@ and HorizontalWall(row:int,col:int,n:int) =
             | _ -> Ignore
 
 
+//11g3
 
+and Backslashwall(row:int,col:int,board:int*int) =
+    inherit BoardElement()
+    member this.Position with get() = (row,col)
+    override this.RenderOn (board:BoardDisplay) =
+        board.Set((fst this.Position),(snd this.Position)," \\") 
+    override this.Interact (other:Robot) (dir:Direction) =
+        let robotrow,robotcol = other.Position
+        match dir with
+            | North when (robotrow,robotcol) = (row,col) && row <> 1 -> Continue (West, (robotrow,robotcol - 1)) 
+            | South when (robotrow,robotcol) = (row,col) && row <> snd board -> Continue (East, (robotrow,robotcol + 1))
+            | East when (robotrow,robotcol) = (row,col) && col <> fst board -> Continue (South, (robotrow + 1,robotcol))
+            | West when (robotrow,robotcol) = (row,col) && col <> 1 -> Continue (North, (robotrow - 1,robotcol))
+            | _ -> Ignore
+
+
+and Telepoter(row:int,col:int,tp:Position,board:int*int) =
+    inherit BoardElement()
+    member this.Position with get() = (row,col)
+    override this.RenderOn (board:BoardDisplay) =
+        board.Set((fst this.Position),(snd this.Position),"TP") 
+    override this.Interact (other:Robot) (dir:Direction) =
+        let mutable robotrow,robotcol = other.Position
+        match dir with
+            | North when (robotrow,robotcol) = (row,col) && fst tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (North, (robotrow - 1,robotcol))
+            | South when (robotrow,robotcol) = (row,col) && fst tp <> snd board -> robotrow <- fst tp; robotcol <- snd tp; Continue (South, (robotrow + 1,robotcol))
+            | East when (robotrow,robotcol) = (row,col) && snd tp <> fst board -> robotrow <- fst tp; robotcol <- snd tp; Continue (East, (robotrow,robotcol + 1)) 
+            | West when (robotrow,robotcol) = (row,col) && snd tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (West, (robotrow,robotcol - 1)) 
+            | _ -> Ignore
 
 
 //11g2
 type Board(rows:int,cols:int) = 
     let SetupBoard () = 
         let frame = BoardFrame(rows,cols)
-        let goal = Goal(System.Random().Next(1,rows),System.Random().Next(1,cols))
+        let goal = Goal(System.Random().Next(2,rows),System.Random().Next(1,cols))
         let hwall = HorizontalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let vwall = VerticalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let hwall2 = HorizontalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
         let vwall2 = VerticalWall(System.Random().Next(1,rows),System.Random().Next(1,cols),System.Random().Next(-4,4))
-        let startelements : list<BoardElement> = [(frame :> BoardElement); (goal :> BoardElement); (hwall :> BoardElement); (vwall :> BoardElement); (hwall2 :> BoardElement); (vwall2 :> BoardElement)]
+        let backslash = Backslashwall(System.Random().Next(2,rows),System.Random().Next(1,cols),(rows,cols))
+        
+        let tp1 = (System.Random().Next(2,rows), System.Random().Next(1,cols))
+        let tp2 = (System.Random().Next(2,rows), System.Random().Next(1,cols))
+        let Telepoter1 = Telepoter(fst tp1,snd tp1, tp2, (rows,cols))
+        let Telepoter2 = Telepoter(fst tp2,snd tp2, tp1, (rows,cols))
+
+        let startelements : list<BoardElement> = [(frame :> BoardElement); (goal :> BoardElement); (hwall :> BoardElement); (vwall :> BoardElement); (hwall2 :> BoardElement); (vwall2 :> BoardElement); (backslash :> BoardElement); (Telepoter1 :> BoardElement); (Telepoter2 :> BoardElement)]
         startelements
     let mutable elements = SetupBoard()
     let mutable robots = []
@@ -182,7 +218,7 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
             b.AddRobot name
     do setup
     member this.PrintRobots() =
-        List.iteri (fun x _ -> printfn "%A: %A" (x) (b.Robots.[x].Name)) b.Robots //prints the list of robots and their index
+        List.iteri (fun x _ -> printfn "%A: %A" (x+1) (b.Robots.[x].Name)) b.Robots //prints the list of robots and their index
     member this.PrintGameOver() =
         System.Console.Clear()
         do printfn "----------------------\nCongratulations, you won!\n----------------------"
@@ -195,21 +231,21 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
             printfn "Select a robot number:"
             let robotnr = System.Console.ReadKey(true)
             try
-                selectedrobot <- b.Robots.[((robotnr.KeyChar.ToString()) |> int)]
+                selectedrobot <- b.Robots.[((robotnr.KeyChar.ToString()) |> int)-1]
             with _ -> 
                 do printfn "Please enter a valid robot number"
                 chooserobot ()
         let rec moveloop () =
             let input = System.Console.ReadKey(true)
             match input with
-            | key when key.Key = System.ConsoleKey.UpArrow -> b.Move(selectedrobot,North)
-            | key when key.Key = System.ConsoleKey.DownArrow -> b.Move(selectedrobot,South)
-            | key when key.Key = System.ConsoleKey.RightArrow -> b.Move(selectedrobot,East)
-            | key when key.Key = System.ConsoleKey.LeftArrow -> b.Move(selectedrobot,West)
-            | key when key.Key = System.ConsoleKey.Enter -> 
-                chooserobot ()
-                moveloop ()
-            | _ -> ()
+                | key when key.Key = System.ConsoleKey.UpArrow -> b.Move(selectedrobot,North)
+                | key when key.Key = System.ConsoleKey.DownArrow -> b.Move(selectedrobot,South)
+                | key when key.Key = System.ConsoleKey.RightArrow -> b.Move(selectedrobot,East)
+                | key when key.Key = System.ConsoleKey.LeftArrow -> b.Move(selectedrobot,West)
+                | key when key.Key = System.ConsoleKey.Enter -> 
+                    chooserobot ()
+                    moveloop ()
+                | _ -> ()
             System.Console.Clear()
             b.RenderElements()
             if b.GameOver then this.PrintGameOver()
@@ -218,7 +254,7 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
         moveloop ()
 
 //To start the game:
-let g = Game(7,7,["AA";"BB"])
-g.Play()
+let g = Game(7,7,["AA";"BB";"CC";"DD"])
+g.Play() 
 
 
