@@ -47,7 +47,6 @@ type BoardDisplay(rows:int,columns:int) =
     member this.Set(row:int,column:int,cont:string) = //cont must have length of 2 chars
         let (top,bot) = EmptyArray.[row-1,column-1]
         EmptyArray.[row-1,column-1] <- (cont + (string top.[2]),bot)
-    member this.Print() = do printfn "%A" EmptyArray //for testing only ________________________________________________________________________________________________________________________________________________________________________________________________________________
 ///<summary>Builds the string which shows the board by showing the content of all fields and adding the outer borders of the board</summary>
 ///<returns>The string which shows the entire board</returns>
     member this.BuildString() =
@@ -380,7 +379,3 @@ type Game(rows:int,cols:int,robotnames:string list) =
             else moveloop ()
         printfn "%A" (this.PrintRobots())
         moveloop ()
-
-//To start the game:
-let g = Game(7,7,["AA";"BB";"CC";"DD"])
-g.Play() 
