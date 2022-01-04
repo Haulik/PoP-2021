@@ -1,15 +1,9 @@
-///<summary> </summary>
-///<param> </param>
-///<returns> </returns>
 type Direction = North | South | East | West 
 type Position = int * int
 type Action =
     | Stop of Position
     | Continue of Direction * Position
     | Ignore
-///<summary>BoardDisplay works by storing the individual fields in an Array2D. It has methods for setting the content of the fields, and a BuildString method which converts the array to a string</summary>
-///<param name="rows">The amount of rows in the board</param>
-///<param name="cols">The amount of columns in the board</param>
 type BoardDisplay(rows:int,columns:int) =
     let EmptyArrayBuilder x y =    
         match (x,y) with
@@ -44,6 +38,7 @@ type BoardDisplay(rows:int,columns:int) =
         board
     member this.Show() = do printfn "%A" (this.BuildString())
 
+//11g1
 [<AbstractClass>] 
 type BoardElement () =
     abstract member RenderOn : BoardDisplay -> unit
@@ -52,10 +47,6 @@ type BoardElement () =
     abstract member GameOver : Robot list -> bool
     default __.GameOver _ = false
 
-///<summary>The robot class. The Interact method stops other robots from entering the same field, the RenderOn method places the robots name on the board, and the Steop method changes the position of the robot by 1 in a given direction</summary>
-///<param name="row">The row of the robots position</param>
-///<param name="col">The column of the robots position</param>
-///<param name="name">The robots name - this must always be exactly two characters.</param>
 and Robot(row:int, col:int, name:string) = 
     inherit BoardElement()
     let mutable position = (row, col)
@@ -78,9 +69,6 @@ and Robot(row:int, col:int, name:string) =
             | East -> position <- (fst position,(snd position) + 1)
             | West -> position <- (fst position,(snd position) - 1)
 
-///<summary>The goal object has the GameOver method, which returns true if one of the robots has stopped in the goal.</summary>
-///<param name="row">The row of the goals position</param>
-///<param name="col">The column of the goals position</param>
 and Goal(row:int, col:int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -92,9 +80,7 @@ and Goal(row:int, col:int) =
     override this.RenderOn (board:BoardDisplay) =
         board.Set((fst this.Position),(snd this.Position),"GO") 
 
-///<summary>The boardframe is the outer edge of the board. The interact method returns Stop when the robot is at the edge of the board</summary>
-///<param name="row">The total amount of rows in the board</param>
-///<param name="col">The total amount of columns in the board</param>
+
 and BoardFrame(row:int,col:int) =
     inherit BoardElement()
     override this.RenderOn (board:BoardDisplay) = () //boardframes are rendered by default
@@ -107,10 +93,6 @@ and BoardFrame(row:int,col:int) =
             | West when robotcol = 1 -> Stop (robotrow,robotcol)
             | _ -> Ignore
 
-///<summary>The VerticalWall is a wall in the playing field with length n. The RenderOn method sets walls in the n fields that are adjacent to the starting location, and the Interact function returns Stop when the robot tries to move into the wall </summary>
-///<param name="row">The row of the walls position</param>
-///<param name="col">The column of the walls position</param>
-///<param name="n">The length of the wall. If n is negative, the wall goes towards north from the starting point, if it is positive, it goes towards south.</param>
 and VerticalWall(row:int,col:int,n:int) =
     inherit BoardElement()
     member this.Length = n
@@ -127,10 +109,6 @@ and VerticalWall(row:int,col:int,n:int) =
             | West when robotcol = col+1 && (min row (row+this.Length)) <= robotrow && robotrow <= (max row (row+this.Length)) -> Stop (robotrow,robotcol)
             | _ -> Ignore
 
-///<summary>The HorizontalWall is similar to the VerticalWall, except it is horizontal. Positive n-values indicate that the wall goes towards east, and vice versa. </summary>
-///<param name="row">The row of the walls position</param>
-///<param name="col">The column of the walls position</param>
-///<param name="n">The length of the wall. If n is negative, the wall goes towards north from the starting point, if it is positive, it goes towards south</param>
 and HorizontalWall(row:int,col:int,n:int) =
     inherit BoardElement()
     member this.Length = n
@@ -148,10 +126,8 @@ and HorizontalWall(row:int,col:int,n:int) =
             | _ -> Ignore
 
 
-///<summary>Backslashwall bounces the robot in a new direction.</summary>
-///<param name="row">The row of the walls position</param>
-///<param name="col">The column of the walls position</param>
-///<param name="board">a board of type (int,int)</param>
+//11g3
+
 and Backslashwall(row:int,col:int,board:int*int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -166,10 +142,7 @@ and Backslashwall(row:int,col:int,board:int*int) =
             | West when (robotrow,robotcol) = (row,col) && col <> 1 -> Continue (North, (robotrow - 1,robotcol))
             | _ -> Ignore
 
-///<summary>A teleporter which teleports the robot if accessed</summary>
-///<param name="row">The row of the teleporter position</param>
-///<param name="col">The column of the teleporter position</param>
-///<param name="board">a board of type (int,int)</param>
+
 and Telepoter(row:int,col:int,tp:Position,board:int*int) =
     inherit BoardElement()
     member this.Position with get() = (row,col)
@@ -184,9 +157,8 @@ and Telepoter(row:int,col:int,tp:Position,board:int*int) =
             | West when (robotrow,robotcol) = (row,col) && snd tp <> 1 -> robotrow <- fst tp; robotcol <- snd tp; Continue (West, (robotrow,robotcol - 1)) 
             | _ -> Ignore
 
-///<summary>The Board of the game, it holds all elements to make the game playable</summary>
-///<param name="rows">The number of rows of a Board</param>
-///<param name="cols">The number of columns of a Board</param>
+
+//11g2
 type Board(rows:int,cols:int) = 
     let SetupBoard () = 
         let frame = BoardFrame(rows,cols)
@@ -236,9 +208,6 @@ type Board(rows:int,cols:int) =
         for e in this.Elements do e.RenderOn (this.Display)
         this.Display.Show()
 
-///<summary> </summary>
-///<param> </param>
-///<returns> </returns>
 type Game(rows:int,cols:int,n:string list) = //the string list contains robot names, their length must be exactly two characters
     let b = Board(rows,cols)
     let rec setup =
@@ -287,3 +256,5 @@ type Game(rows:int,cols:int,n:string list) = //the string list contains robot na
 //To start the game:
 let g = Game(7,7,["AA";"BB";"CC";"DD"])
 g.Play() 
+
+
