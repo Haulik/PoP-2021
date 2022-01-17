@@ -1,4 +1,5 @@
 module ReadNWrite
+
 ///<summary>Opens the file 'filename' and reads the entire contents as string. </summary>
 ///<param name="filename">The name/directory of the file to be opened, as a string</param>
 ///<returns>A string option, containing the contents of the document if it succeeds, or None if an exception is raised.</returns>
